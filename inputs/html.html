@@ -1,0 +1,126 @@
+Delivered-To: chris.interim@gmail.com
+Received: from imap.gmail.com [142.250.31.108]
+	by ip-10-2-109-10.ec2.internal with IMAP (fetchmail-6.3.17)
+	for <chris@localhost> (single-drop); Fri, 04 Sep 2020 16:47:03 -0400 (EDT)
+Received: by 2002:a67:694d:0:0:0:0:0 with SMTP id e74csp1564102vsc; Fri, 4 Sep
+ 2020 13:46:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsMUaGjvfEUM3JITHx04GqVipxXVmP9jYElIuV23MEO7WWFM8yrBUnSRrCAeaSQwnkOBRx
+X-Received: by 2002:a05:620a:a45:: with SMTP id
+ j5mr9961222qka.367.1599252401207; Fri, 04 Sep 2020 13:46:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1599252401; cv=none; d=google.com;
+ s=arc-20160816;
+ b=VSdJTvUwxwqS9gFvPrtxQgu1/MH8Ji7XnYkwX3FjgWGTLJ8gNcZ3IWMCGvBeifFgez
+ mM29t2jkw3c5Qu2r/nX2sKxperMdJM0dfhUm7FC9Qtp0qEUKV+cE8we0V+RBwFsTjYIu
+ wUlx33KY3KJGRLBD/lC7nH+D0OQt/pOz033EU59Rd+UEJwV/Ooel+CcCga3D/FTBUSGN
+ ypZDFXEhtUHpAG6yyydv+QkjWhtfxK/pPyfYwFAVKTYDIvEk6q+5TCx6DoaJzDmpaKcE
+ mkVP70aw+hYvvrnRckpSd008kIweG00WqLItS1/PR1k9j2RkIEEu6TlhIqfyaiPlvVpI INaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20160816; h=subject:to:from:date:mime-version:content-transfer-encoding
+ :message-id; bh=Krb5i3uUw4nW71N57mEDxea6pe5xVdt2cAu6iW0+R24=;
+ b=cU2Gc1StFSBYs1Tm/0xZCjv1X5sMU6TPbvSa9so59/dYfW65ynYIDfeVkzoaBQmW4O
+ WFgZIjA8d/LSOOlwtqkmELNM29ZYP6s/lCNmoTdn1zTPVfSdBgNouC8f2N4D0Yr6T9F6
+ 02iAKtZ8dSR9XglM39dLKsOsY4o0YkOmC6U2bC/TqCrup8aRwlDBGGeElYezoq12K0l1
+ Td6hAKudEAt4u+UpQ3mi/XUDBLplqBU6cWmJKFORJn/Pn5t83pYlkiJimj3Gx+cOkQsy
+ pmRJcs5Fdcf0o4Wu7KAP6Oky/JEN4zRibB3aOO5/i6uJLEWNaTbJGdiVuH+O8lq9F+Ln 7MQg==
+ARC-Authentication-Results: i=1; mx.google.com; spf=neutral (google.com:
+ 54.243.200.247 is neither permitted nor denied by best guess record for
+ domain of pantry_checkin@ns.brightsands.com)
+ smtp.mailfrom=Pantry_Checkin@ns.brightsands.com
+Return-Path: <Pantry_Checkin@ns.brightsands.com>
+Received: from ip-10-2-109-10.ec2.internal
+ (ec2-54-243-200-247.compute-1.amazonaws.com. [54.243.200.247]) by
+ mx.google.com with ESMTPS id v19si6012633qvz.165.2020.09.04.13.46.40 for
+ <chris.interim@gmail.com> (version=TLS1_2
+ cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128); Fri, 04 Sep 2020 13:46:41
+ -0700 (PDT)
+Received-SPF: neutral (google.com: 54.243.200.247 is neither permitted nor
+ denied by best guess record for domain of pantry_checkin@ns.brightsands.com)
+ client-ip=54.243.200.247;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 54.243.200.247
+ is neither permitted nor denied by best guess record for domain of
+ pantry_checkin@ns.brightsands.com)
+ smtp.mailfrom=Pantry_Checkin@ns.brightsands.com
+Received: from ip-10-2-109-10.ec2.internal (localhost [127.0.0.1]) by
+ ip-10-2-109-10.ec2.internal (8.14.4/8.14.4) with ESMTP id 084KkeRV027650 for
+ <chris.interim@gmail.com>; Fri, 4 Sep 2020 16:46:40 -0400
+Received: (from apache@localhost) by ip-10-2-109-10.ec2.internal
+ (8.14.4/8.14.4/Submit) id 084KkeOg027649; Fri, 4 Sep 2020 16:46:40 -0400
+Message-Id: <202009042046.084KkeOg027649@ip-10-2-109-10.ec2.internal>
+X-Authentication-Warning: ip-10-2-109-10.ec2.internal: apache set sender to
+ Pantry_Checkin@www.brightsands.com using -f
+Content-Transfer-Encoding: binary
+Content-Type: multipart/mixed; boundary="_----------=_1599252400276460"
+MIME-Version: 1.0
+X-Mailer: MIME::Lite 3.029 (F2.84; T1.35; A2.11; B3.13; Q3.13)
+Date: Fri, 4 Sep 2020 16:46:40 -0400
+From: Pantry_Checkin@ns.brightsands.com
+To: chris.interim@gmail.com
+Subject: Clients this session
+
+This is a multi-part message in MIME format.
+
+--_----------=_1599252400276460
+Content-Disposition: inline; filename="Pantry Checkin data"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/html; name="Pantry Checkin data"
+
+<!doctype html><html lang=en><head></head><body><style type="text/css">
+<!--
+    	input.fixed_width_button	{width:90%;}
+	td input.fixed_width_button	{width:90%;}
+
+-->
+</style>
+<link href="Pantry_Checkin/Pantry_Checkin.css" rel="stylesheet" type="text/css" />
+<QSCRIPT SRC="usprompt.js" TYPE="text/javascript"></QSCRIPT>
+<script>
+function submit_func( fnc, val )
+    {
+    with( window.document.form )
+	{
+	func.value = fnc;
+	if( typeof(val) != "undefined" ) { arg.value = val ; }
+	submit();
+	}
+    }
+%%JSCRIPT%%
+</script>
+</head><body>
+<form name=form method=post ENCTYPE="multipart/form-data">
+<input type=hidden name=func>
+<input type=hidden name=arg>
+<input type=hidden name=SID value="4xMTRe1xy">
+<input type=hidden name=USER value="chris">
+<center>
+<table cellpadding=10 border=1 style="border-collapse: collapse; border: solid;">
+<tr>
+<td colspan=8><b>Maine Pantries</b> modified 09/04/2020 16:46 by chris</th></tr>
+<tr><th align=left>Name</th><th align=left>Phone</th><th align=left>Town</th><th align=left>Notes</th><th align=left>Infants</th><th align=left>Dogs</th><th align=left>Cats</th><th align=left>Disposition</th></tr>
+<tr><td bgcolor=#ffd0d0>Debora Barrera</td><td bgcolor=#ffd0d0>207-320-8314</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Evelyn Cushman</td><td bgcolor=#ffd0d0>207-778-4564</td><td bgcolor=#ffd0d0>Temple</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Debbie Hahn</td><td bgcolor=#ffd0d0>207-313-4111</td><td bgcolor=#ffd0d0>Industry</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Charlotte Bogue</td><td bgcolor=#ffd0d0>207-629-7333</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Emily Bryant</td><td bgcolor=#ffd0d0>207-491-9775</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Glennis McKeckney</td><td bgcolor=#ffd0d0>207-293-2065</td><td bgcolor=#ffd0d0>Vienna</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Linda Haines</td><td bgcolor=#ffd0d0>207-778-3879</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Mary Jo Tufts</td><td bgcolor=#ffd0d0>207-778-6779</td><td bgcolor=#ffd0d0>Chesterville</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Debra Huff Emerson</td><td bgcolor=#ffd0d0>207-778-1310</td><td bgcolor=#ffd0d0>West Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Betty Smith</td><td bgcolor=#ffd0d0>207-778-1310</td><td bgcolor=#ffd0d0>West Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>John Bertt</td><td bgcolor=#ffd0d0>207-528-1011</td><td bgcolor=#ffd0d0>New Portland</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Lisa Vargus</td><td bgcolor=#ffd0d0>207-418-5044</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Tammy Baker</td><td bgcolor=#ffd0d0>207-778-5187</td><td bgcolor=#ffd0d0>New Sharon</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Darcy Everett</td><td bgcolor=#ffd0d0>207-558-2135</td><td bgcolor=#ffd0d0>New Sharon</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Ethan Starbird</td><td bgcolor=#ffd0d0>207-491-4288</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Rosalie Harris</td><td bgcolor=#ffd0d0>207-500-1675</td><td bgcolor=#ffd0d0>Industry</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Phyllis Message</td><td bgcolor=#ffd0d0>207-491-8876</td><td bgcolor=#ffd0d0>Industry</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Tanya Hill</td><td bgcolor=#ffd0d0>207-778-5571</td><td bgcolor=#ffd0d0>Industry</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Katherine Cole</td><td bgcolor=#ffd0d0>207-778-5571</td><td bgcolor=#ffd0d0>Industry</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Jim Leeman</td><td bgcolor=#ffd0d0>207-639-4137</td><td bgcolor=#ffd0d0>Phillips</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>1</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>George Huff</td><td bgcolor=#ffd0d0>207-656-463?</td><td bgcolor=#ffd0d0>North Vineyard</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Frank St. John</td><td bgcolor=#ffd0d0>207-578-8381</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Pat Starbird</td><td bgcolor=#ffd0d0>207-779-7004</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Robert Anthony</td><td bgcolor=#ffd0d0>207-491-2069</td><td bgcolor=#ffd0d0>Temple</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Michelle Bueller</td><td bgcolor=#ffd0d0>207-491-6335</td><td bgcolor=#ffd0d0>Temple</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr>
+<tr><td bgcolor=#ffd0d0>Abyssine Delitar</td><td bgcolor=#ffd0d0>207-729-7519</td><td bgcolor=#ffd0d0>Farmington</td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0></td><td bgcolor=#ffd0d0>Here</td></tr></table><a href=http://www.brightsands.com/Pantry_Checkin.cgi>Application</a></center>
+</body></html>
+--_----------=_1599252400276460--
