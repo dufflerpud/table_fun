@@ -12,24 +12,24 @@ PROJECTSDIR?=$(shell echo $(CURDIR) | sed -e 's+/projects/.*+/projects+')
 include $(PROJECTSDIR)/common/Makefile.std
 
 OUTPUT_TYPES=$(basename $(notdir $(wildcard handlers/*.pl)))
-INPUT_FILES=$(notdir $(wildcard inputs/*.*) )
+INPUT_FILES=$(notdir $(wildcard tests/*.*) )
 TEST_OUTPUTS=$(addprefix $(RESDIR)/,$(foreach output,$(OUTPUT_TYPES),$(foreach input,$(INPUT_FILES),$(input).$(output))))
-vars:
-		@echo "INPUT_FILES=$(INPUT_FILES)"
-		@echo "OUTPUT_TYPES=$(OUTPUT_TYPES)"
-		@echo "TEST_OUTPUTS=$(TEST_OUTPUTS)"
-		@echo "RESDIR=$(RESDIR)"
 
-#%:
-#		@echo "Invoking std_$@ rule:"
-#		@$(MAKE) std_$@ ORIGINAL_TARGET=$@
-
-test:		$(TEST_OUTPUTS)
+test:
+		echo making test...
+		echo "output_types=$(OUTPUT_TYPES)"
+		echo "input_files=$(INPUT_FILES)"
+		echo "test_outputs=$(TEST_OUTPUTS)"
+		make $(TEST_OUTPUTS)
 
 $(RESDIR)/%:
 		@[ -d $(RESDIR) ] || mkdir -p $(RESDIR)
-		$(BINDIR)/table_fun -if inputs/$(notdir $(basename $@)) -of $@
+		$(BINDIR)/table_fun -if tests/$(notdir $(basename $@)) -of $@
 
 results/%:
 		@[ -d $(RESDIR) ] || mkdir -p $(RESDIR)
-		$(BINDIR)/table_fun -if inputs/$(notdir $(basename $@)) -of $@
+		$(BINDIR)/table_fun -if tests/$(notdir $(basename $@)) -of $@
+
+%:
+		@echo "Invoking std_$@ rule:"
+		@$(MAKE) std_$@ ORIGINAL_TARGET=$@
