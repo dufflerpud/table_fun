@@ -1,0 +1,89 @@
+#!/usr/bin/perl -w
+use strict;
+
+$main::FUNCS{text} = $main::FUNCS{txt} =
+    {
+    pretty	=>"text - Text file",
+    mime	=>"text/plain",
+    input	=>\&input_text,
+    output	=>\&output_text
+    };
+
+my $COMMON_SEPS = "\t,|!:+";
+
+#########################################################################
+#	Parse a text file						#
+#########################################################################
+sub input_text
+    {
+    my( $fl ) = @_;
+    if( ! defined( $main::ARGS{id} ) )
+        {
+	foreach my $try ( split(//,$COMMON_SEPS) )
+	    {
+	    my $sep = '\\' . $try;
+	    if( $fl =~ /$sep.*$sep/ )
+	        { $main::ARGS{id}=$try; last; }
+	    }
+	$main::ARGS{id} ||= "\t";
+	}
+    my $sep = '\\' . $main::ARGS{id};
+
+    my %output_data;
+    foreach my $rec ( split(/\n/ms,$fl) )
+        {
+	my @splitline;
+	foreach my $celldata ( split(/$sep/,$rec) )
+	    {
+	    $celldata = $1 if( $celldata =~ /^\s*?(.*?)\s*?$/ );
+	    push( @splitline, $celldata ); 
+	    }
+	if( scalar(@splitline) == 1 )
+	    { push( @{$output_data{records}}, @splitline ); }
+	elsif( $output_data{byindex} )
+	    { push( @{$output_data{records}}, \@splitline ); }
+	else
+	    {
+	    my $fldnum = 0;
+	    foreach my $celldata ( @splitline )
+		{
+		my %fd = ( name=>$celldata, ind=>$fldnum );
+		$output_data{byname}{$celldata} = \%fd;
+		push( @{ $output_data{byindex} }, \%fd );
+		$fldnum++;
+		}
+	    }
+	}
+    return \%output_data;
+    }
+
+#########################################################################
+#	Output text							#
+#########################################################################
+sub output_text
+    {
+    my( $input_data ) = @_;
+
+    &calculate_field_widths( $input_data );
+
+    $_ = join( $main::ARGS{od},
+	map{ sprintf($_->{sprintf},$_->{name}) } @{$input_data->{print_order}} );
+    s/\s*$//g;
+    print OUT $_,"\n";
+
+    foreach my $rp ( @{$input_data->{records}} )
+	{
+	my @ln;
+	foreach my $f ( @{$input_data->{print_order}} )
+	    {
+	    my $cp = $rp->[ $f->{ind} ];
+	    $cp = "" if( ! defined($cp) );
+	    push( @ln, sprintf($f->{sprintf},$cp) );
+	    }
+	$_ = join( $main::ARGS{od}, @ln );
+	s/\s*$//g;
+	print OUT $_, "\n";
+	}
+    }
+
+1;
