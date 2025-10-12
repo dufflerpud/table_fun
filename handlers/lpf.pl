@@ -11,31 +11,25 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{lpf} =
-$main::FUNCS{lpf} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"lpf - one line per field",
-    mime	=>"text/plain",
-    input	=>\&input_lpf,
-    output	=>\&output_lpf,
-    recognizer	=>\&recognizer_lpf
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "lpf - one line per field";
+$DRIVER->{mime}		= "text/plain";
 
 #########################################################################
 #	Recognize a lpf file.						#
 #########################################################################
-sub recognizer_lpf
+$DRIVER->{recognizer} = sub
     {
     return 0 if( $_[0]=~/^Subject:/ms && $_[0]=~/^From:/ && $_[0]=~/^To:/ );
     return
         ( scalar(grep(/:/,split(/^([^:\n]*:[^:\n]*)$/ms,$_[0])))>2 ||
 	  scalar(grep(/=/,split(/^([^=\n]*=[^=\n]*)$/ms,$_[0])))>2 );
-    }
+    };
 
 #########################################################################
 #	Parse a lpf file						#
 #########################################################################
-sub input_lpf
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
     my %output_data;
@@ -51,22 +45,23 @@ sub input_lpf
 	     || $celldata =~ /^\s*(\w+)\s*[:=]\s*(.*?)$/ )
 		{
 	        my( $fname, $fval ) = ( $1, $2 );
-		$cells[&ind_of_field($fname,\%output_data)] = $fval;
+		$cells[&main::ind_of_field($fname,\%output_data)] = $fval;
 		}
 	    }
 	push( @{$output_data{records}}, \@cells );
 	}
     return \%output_data;
-    }
+    };
 
 #########################################################################
 #	Output one line per field					#
 #########################################################################
-sub output_lpf
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
-    &calculate_field_widths( $input_data );
+    &main::calculate_field_widths( $input_data );
 
     my $field_name_length = -1;
     foreach my $f ( @{$input_data->{print_order}} )
@@ -84,11 +79,11 @@ sub output_lpf
 	    if( defined($cp) && $cp =~ /[^\s]/ )
 		{
 		my $flen = $f->{width};
-		printf OUT ("%-${field_name_length}s%s\n",$f->{name}.":",$cp);
+		push( @ret, sprintf("%-${field_name_length}s%s\n",$f->{name}.":",$cp) );
 		}
 	    }
-	printf OUT ("\n");
 	}
-    }
+    return join("\n",@ret);
+    };
 
 1;

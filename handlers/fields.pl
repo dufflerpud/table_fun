@@ -11,23 +11,20 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{fields} =
-$main::FUNCS{fields} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"fields",
-    mime	=>"text/plain",
-    output	=>\&output_fields
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "fields";
+$DRIVER->{mime}		= "text/plain";
 
 #########################################################################
 #	Output each field with a list of found values.			#
 #########################################################################
-sub output_fields
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
     my %values;
+    my @ret;
 
-#    print OUT "Type of $main::ARGS{if}",
+#    push @ret, "Type of $main::ARGS{if}",
 #	" is $main::ARGS{it} based on the $main::reason.\n";
     $main::reason=$main::reason;	# Eliminate "only used once" errors.
 
@@ -43,9 +40,10 @@ sub output_fields
 
     foreach my $f ( @{$input_data->{print_order}} )
         {
-	print OUT $f->{name}, ":\n",
+	push @ret, $f->{name}, ":\n",
 	    ( map { "\t".$_."\n" } sort keys %{$values{$f}} );
 	}
-    }
+    return join("",@ret);
+    };
 
 1;

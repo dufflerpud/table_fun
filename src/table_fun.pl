@@ -31,6 +31,7 @@ use lib "/usr/local/lib/perl";
 use cpi_file qw( cleanup fatal files_in );
 use cpi_cgi qw( CGIreceive CGIheader );
 use cpi_arguments qw( parse_arguments );
+use cpi_drivers qw( get_drivers );
 
 # Put constants here
 our %ONLY_ONE_DEFAULTS =
@@ -190,6 +191,14 @@ sub calculate_field_widths
     }
 
 #########################################################################
+#	Defined because csv driver is really just a blatant rippoff	#
+#	of the text driver.  Sadly the drivers do not support directly	#
+#	calling each other.						#
+#########################################################################
+sub input_text	{ return &{$FUNCS{text}{input}}( @_ ); }
+sub output_text	{ return &{$FUNCS{text}{output}}( @_ ); }
+
+#########################################################################
 #	Figure out what input file is and employ appropriate parser.	#
 #########################################################################
 sub input_records
@@ -280,7 +289,7 @@ sub output_records
 	elsif( ! open(OUT, ">&STDOUT" ) )
 	    { &fatal("Cannot dup(STDOUT):  $!"); }
 	}
-    &{ $FUNCS{$ARGS{ot}}{output} }( $input_data );
+    print OUT &{ $FUNCS{$ARGS{ot}}{output} }( $input_data );
     close( OUT );
     }
 
@@ -354,16 +363,7 @@ sub do_table_conversion
 #########################################################################
 #	Main								#
 #########################################################################
-#
-#my @QS = &cpi_file::files_in( $HANDLER_DIR, "^[^\.].*.pl\$" );
-#print "QS=[",join(",",@QS),"]\n";
-#exit(0);
-#opendir( D, $HANDLER_DIR ) || &fatal("Cannot opendir($HANDLER_DIR):  $!");
-#foreach my $h ( map {"$HANDLER_DIR/$_"} grep( /^[^\.].*.pl$/, readdir(D) ) )
-#closedir( D );
-foreach my $h ( map {"$HANDLER_DIR/$_"} &files_in($HANDLER_DIR,"^[^\.].*.pl\$") )
-#foreach my $h ( 1, 2, 3 )
-    { do $h; }
+%FUNCS = &get_drivers( $HANDLER_DIR );
 
 if( $ENV{SCRIPT_NAME} )
     {

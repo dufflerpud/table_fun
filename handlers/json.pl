@@ -13,25 +13,20 @@ use strict;
 
 use JSON;
 
-$main::FUNCS{json} =
-$main::FUNCS{json} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"json",
-    mime	=>"text/plain",
-    input	=>\&input_json,
-    output	=>\&output_json,
-    #recognizer	=>"{[A-Za-z].*:.*}"
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "json";
+$DRIVER->{mime}		= "text/plain";
+#$DRIVER->{recognizer}	= "{[A-Za-z].*:.*}";
 
 #########################################################################
 #	Parse a json file (more of a toy than actually useful)		#
 #########################################################################
-sub input_json
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
 
-    return &table_in_memory( decode_json( $fl ) );
-    }
+    return &main::table_in_memory( decode_json( $fl ) );
+    };
 
 #########################################################################
 #	Fix quoting of argument.					#
@@ -47,23 +42,23 @@ sub json_requote
 #########################################################################
 #	Print code suitable for inclusion in javascript.		#
 #########################################################################
-sub output_json
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
-    my @l;
     foreach my $p ( @{$input_data->{records}} )
 	{
-	push( @l,
+	push( @ret,
 	    "{".  join(",",
-	        map { '"'.&orempty(${_}->{name}).'":"' .
+	        map { '"'.&main::orempty(${_}->{name}).'":"' .
 		    &json_requote(
 		        ( defined($_->{ind})
-			? &orempty($p->[$_->{ind}]):"") ). '"' }
+			? &main::orempty($p->[$_->{ind}]):"") ). '"' }
 			    @{$input_data->{print_order}}
 	    ) ."}" );
 	}
-    print OUT "[ ", join(",\n  ",@l), " ]\n";
-    }
+    return join("", "[ ", join(",\n  ",@ret), " ]\n");
+    };
 
 1;

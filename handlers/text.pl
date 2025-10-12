@@ -11,20 +11,16 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{text} = $main::FUNCS{txt} =
-    {
-    pretty	=>"text - Text file",
-    mime	=>"text/plain",
-    input	=>\&input_text,
-    output	=>\&output_text
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "text - Text file";
+$DRIVER->{mime}		= "text/plain";
 
 my $COMMON_SEPS = "\t,|!:+";
 
 #########################################################################
 #	Parse a text file						#
 #########################################################################
-sub input_text
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
     if( ! defined( $main::ARGS{id} ) )
@@ -76,21 +72,22 @@ sub input_text
 	    }
 	}
     return \%output_data;
-    }
+    };
 
 #########################################################################
 #	Output text							#
 #########################################################################
-sub output_text
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
-    &calculate_field_widths( $input_data );
+    &main::calculate_field_widths( $input_data );
 
     $_ = join( $main::ARGS{od},
 	map{ sprintf($_->{sprintf},$_->{name}) } @{$input_data->{print_order}} );
     s/\s*$//g;
-    print OUT $_,"\n";
+    push @ret, $_,"\n";
 
     foreach my $rp ( @{$input_data->{records}} )
 	{
@@ -103,8 +100,9 @@ sub output_text
 	    }
 	$_ = join( $main::ARGS{od}, @ln );
 	s/\s*$//g;
-	print OUT $_, "\n";
+	push @ret, $_, "\n";
 	}
-    }
+    return join("",@ret);
+    };
 
 1;

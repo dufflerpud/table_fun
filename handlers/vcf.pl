@@ -11,16 +11,11 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{vcf} =
-$main::FUNCS{vcf} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"vcf - Virtual Contact File",
-    mime	=>"text/plain",
-    input	=>\&input_vcf,
-    output	=>\&output_vcf,
-    recognizer	=>"BEGIN:VCARD",
-    recopri	=>2
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "vcf - Virtual Contact File";
+$DRIVER->{mime}		= "text/plain";
+$DRIVER->{recognizer}	= "BEGIN:VCARD";
+$DRIVER->{recopri}	= 2;
 
 #########################################################################
 #	Parse a VCF file.						#
@@ -64,7 +59,7 @@ my %COLLAPSE_FIELDS =
 #	Parse a VCF file (unfortunately, they are so hairy that we end	#
 #	up doing lots of table based substitutions).			#
 #########################################################################
-sub input_vcf
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
     my %output_data;
@@ -154,7 +149,7 @@ sub input_vcf
 	while( defined($_ = shift @inlines) && $_ =~ /^\s*$/ ) {};
 	}
     return \%output_data;
-    }
+    };
 
 #########################################################################
 #	Return named field from current record.				#
@@ -167,16 +162,17 @@ sub field_of
 #	(defined($ind)?$ind:"UNDEF"), "\n";
     return
 	( defined($ind)
-	? &orempty( $rp->[ $input_data->{byname}{$fname}->{ind} ] )
+	? &main::orempty( $rp->[ $input_data->{byname}{$fname}->{ind} ] )
 	: "" );
     }
 
 #########################################################################
 #	Output vcf							#
 #########################################################################
-sub output_vcf
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
     foreach my $rp ( @{$input_data->{records}} )
         {
@@ -185,20 +181,21 @@ sub output_vcf
 	    { $pphone="($1) $2-$3"; }
 	else
 	    { $pphone ||= ""; }
-	print OUT
-	    "BEGIN:VCARD\nVERSION:3.0\n",
-	    "N:".&field_of($input_data,$rp,"Last_name").';'.&field_of($input_data,$rp,"First_name").";;;\n",
-	    "FN:".&field_of($input_data,$rp,"Last_name").';'.&field_of($input_data,$rp,"First_name").";;;\n",
-	    "ORG:".&field_of($input_data,$rp,"Company").";\n",
-	    "TEL;type=mobile;type=VOICE;type=pref:$pphone\n",
-	    "item1.ADR;type=HOME;type=pref:;;",
-		&field_of($input_data,$rp,"Address"),";",
-		&field_of($input_data,$rp,"State"),";",
-		&field_of($input_data,$rp,"Zip"),";",
-		"United States\n",
-	    "item1.X-ABADR:us\n",
-	    "END:VCARD\n\n";
+	push @ret,
+	    "BEGIN:VCARD\nVERSION:3.0\n".
+	    "N:".&field_of($input_data,$rp,"Last_name").';'.&field_of($input_data,$rp,"First_name").";;;\n".
+	    "FN:".&field_of($input_data,$rp,"Last_name").';'.&field_of($input_data,$rp,"First_name").";;;\n".
+	    "ORG:".&field_of($input_data,$rp,"Company").";\n".
+	    "TEL;type=mobile;type=VOICE;type=pref:$pphone\n".
+	    "item1.ADR;type=HOME;type=pref:;;".
+		&field_of($input_data,$rp,"Address").";".
+		&field_of($input_data,$rp,"State").";".
+		&field_of($input_data,$rp,"Zip").";".
+		"United States\n".
+	    "item1.X-ABADR:us\n".
+	    "END:VCARD\n";
 	}
-    }
+    return join("\n",@ret);
+    };
 
 1;

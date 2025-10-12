@@ -11,20 +11,16 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{html} = $main::FUNCS{htm} =
-    {
-    pretty	=>"HTML",
-    mime	=>"text/html",
-    input	=>\&input_html,
-    output	=>\&output_html,
-    recognizer	=>"<table.*?>.*?<\/table>",
-    recopri	=>3
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "HTML";
+$DRIVER->{mime}		= "text/html";
+$DRIVER->{recognizer}	= "<table.*?>.*?<\/table>";
+$DRIVER->{recopri}	= 3;
 
 #########################################################################
 #	Parse an html table						#
 #########################################################################
-sub input_html
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*(<table.*?)>(.*?)<\/table>/ms );
@@ -64,29 +60,30 @@ sub input_html
 	    }
 	}
     return \%output_data;
-    }
+    };
 
 #########################################################################
 #	Output html table						#
 #########################################################################
-sub output_html
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
-    &calculate_field_widths( $input_data );
+    &main::calculate_field_widths( $input_data );
 
-    print OUT "<table cellpadding=4 border=1 style='border-collapse:collapse'>\n";
-    print OUT "<tr>";
+    push @ret, "<table cellpadding=4 border=1 style='border-collapse:collapse'>\n";
+    push @ret, "<tr>";
     foreach my $f ( @{$input_data->{print_order}} )
         {
-	print OUT "<th ", $f->{tdargs}, ">", $f->{name}, "</th>";
+	push @ret, "<th ", $f->{tdargs}, ">", $f->{name}, "</th>";
 	}
     foreach my $rp ( @{$input_data->{records}} )
         {
-	print OUT "</tr>\n<tr>";
+	push @ret, "</tr>\n<tr>";
 	if( scalar(@{$rp}) == 1 )
 	    {
-	    print OUT "<th align=left colspan=",scalar(@{$input_data->{print_order}}),">", ${$rp}[0], "</th>";
+	    push @ret, "<th align=left colspan=",scalar(@{$input_data->{print_order}}),">", ${$rp}[0], "</th>";
 	    }
 	else
 	    {
@@ -94,11 +91,12 @@ sub output_html
 		{
 		my $cp = $rp->[ $f->{ind} ];
 		$cp = "" if( ! defined($cp) );
-		print OUT "<td valign=top ", $f->{tdargs}, ">", $cp, "</td>";
+		push @ret, "<td valign=top ", $f->{tdargs}, ">", $cp, "</td>";
 		}
 	    }
 	}
-    print OUT "</tr></table>\n";
-    }
+    push @ret, "</tr></table>\n";
+    return join("",@ret);
+    };
 
 1;

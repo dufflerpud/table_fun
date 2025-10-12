@@ -13,20 +13,15 @@ use strict;
 
 use Data::Dumper;
 
-$main::FUNCS{po} =
-$main::FUNCS{perl} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"perl",
-    mime	=>"text/plain",
-    input	=>\&input_perl,
-    output	=>\&output_perl,
-    recognizer	=>"{.*=>.*}"
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "perl";
+$DRIVER->{mime}		= "text/plain";
+$DRIVER->{recognizer}	= "{.*=>.*}";
 
 #########################################################################
 #	Parse a perl file (more of a toy than actually useful)		#
 #########################################################################
-sub input_perl
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
 
@@ -34,8 +29,8 @@ sub input_perl
     $fl = "\$VAR1 = $fl" if( $fl !~ /^\$VAR1/ );
     eval( $fl );
 
-    return &table_in_memory( $VAR1 );
-    }
+    return &main::table_in_memory( $VAR1 );
+    };
 
 #########################################################################
 #	Fix quoting of argument.					#
@@ -56,24 +51,24 @@ sub perl_requote
 #									#
 #	However, it made me look at Data::Dumper and that's cool!	#
 #########################################################################
-sub output_perl
+$DRIVER->{output} = sub
     {
-#    my( $input_data ) = @_;
-#
+    my( $input_data ) = @_;
+
 #    my @l;
 #    foreach my $p ( @{$input_data->{records}} )
 #	{
 #	push( @l,
 #	    "{".  join(",",
 #	        map {
-#		    '"'.&orempty(${_}->{name}).'"=>"' .
+#		    '"'.&main::orempty(${_}->{name}).'"=>"' .
 #		    ( defined($_->{ind})
-#			? &perl_requote(&orempty($p->[$_->{ind}])) : "" ). '"'
+#			? &perl_requote(&main::orempty($p->[$_->{ind}])) : "" ). '"'
 #		    } @{$input_data->{print_order}}
 #	    ) ."}" );
 #	}
-#    print OUT "[ ", join(",\n  ",@l), " ]\n";
-    print OUT Dumper( $input_data );
-    }
+#    push @ret, "[ ", join(",\n  ",@l), " ]\n";
+    return Dumper( $input_data );
+    };
 
 1;

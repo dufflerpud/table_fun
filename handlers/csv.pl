@@ -11,24 +11,27 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{csv} =
-$main::FUNCS{csv} =	# Eliminate "only used once" errors.
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "csv";
+$DRIVER->{mime}		= "text/plain";
+#$DRIVER->{recognizer}	= ".*,.*,.*",
+
+#########################################################################
+#	Just like input for text driver.				#
+#########################################################################
+$DRIVER->{input} = sub
     {
-    pretty	=>"csv",
-    mime	=>"text/plain",
-    input	=>\&input_text,
-    output	=>\&output_csv,
-    #recognizer	=>".*,.*,.*",
+    return &{ $main::FUNCS{text}{input} }( @_ );
     };
 
 #########################################################################
 #	Just like output text only use a comma as the delimeter.	#
 #########################################################################
-sub output_csv
+$DRIVER->{output} = sub
     {
     $main::ARGS{od} = ",";
     $main::ARGS{oj} = 0;
-    &output_text( @_ );
-    }
+    return &{ $main::FUNCS{text}{output} }( @_ );
+    };
 
 1;

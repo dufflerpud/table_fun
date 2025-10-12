@@ -11,20 +11,14 @@
 #@HDR@	it is furnished.
 use strict;
 
-$main::FUNCS{mwt} =
-$main::FUNCS{mwt} =	# Eliminate "only used once" errors.
-    {
-    pretty	=>"mwt - Media Wiki Table",
-    mime	=>"text/plain",
-    input	=>\&input_mwt,
-    output	=>\&output_mwt,
-    recognizer	=>"{\\|.*\\|"
-    };
+my $DRIVER||={};	# Just for debugging
+$DRIVER->{pretty}	= "mwt - Media Wiki Table",
+$DRIVER->{mime}		= "text/plain",
 
 #########################################################################
 #	Parse a media wiki table					#
 #########################################################################
-sub input_mwt
+$DRIVER->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*({\|[^!\|]*)(.*?)\|}/ms );
@@ -71,28 +65,29 @@ sub input_mwt
 	    }
 	}
     return \%output_data;
-    }
+    };
 
 #########################################################################
 #	Output a media wiki table					#
 #########################################################################
-sub output_mwt
+$DRIVER->{output} = sub
     {
     my( $input_data ) = @_;
+    my @ret;
 
-    &calculate_field_widths( $input_data );
+    &main::calculate_field_widths( $input_data );
 
-    print OUT "{| border=1 cellspacing=0\n";
+    push @ret, "{| border=1 cellspacing=0\n";
     foreach my $f ( @{$input_data->{print_order}} )
         {
-	print OUT "!", $f->{tdargs}, "|", $f->{name}, "\n";
+	push @ret, "!", $f->{tdargs}, "|", $f->{name}, "\n";
 	}
-    print OUT "|-\n";
+    push @ret, "|-\n";
     foreach my $rp ( @{$input_data->{records}} )
         {
 	if( scalar(@{$rp}) == 1 )
 	    {
-	    print OUT "| colspan=",scalar(@{$input_data->{print_order}}),"|", ${$rp}[0];
+	    push @ret, "| colspan=",scalar(@{$input_data->{print_order}}),"|", ${$rp}[0];
 	    }
 	else
 	    {
@@ -100,12 +95,13 @@ sub output_mwt
 		{
 		my $cp = $rp->[ $f->{ind} ];
 		$cp = "" if( ! defined($cp) );
-		print OUT "|", $f->{tdargs}, "|", $cp, "\n";
+		push @ret, "|", $f->{tdargs}, "|", $cp, "\n";
 		}
 	    }
-	print OUT "|-\n";
+	push @ret, "|-\n";
 	}
-    print OUT "|}\n";
-    }
+    push @ret, "|}\n";
+    return join("",@ret);
+    };
 
 1;
