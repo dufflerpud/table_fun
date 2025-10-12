@@ -11,7 +11,7 @@
 #@HDR@	it is furnished.
 use strict;
 
-my $DRIVER||={};	# Just for debugging
+my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "fields";
 $DRIVER->{mime}		= "text/plain";
 

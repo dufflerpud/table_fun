@@ -13,7 +13,7 @@ use strict;
 
 use Data::Dumper;
 
-my $DRIVER||={};	# Just for debugging
+my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "perl";
 $DRIVER->{mime}		= "text/plain";
 $DRIVER->{recognizer}	= "{.*=>.*}";

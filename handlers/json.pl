@@ -13,7 +13,7 @@ use strict;
 
 use JSON;
 
-my $DRIVER||={};	# Just for debugging
+my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "json";
 $DRIVER->{mime}		= "text/plain";
 #$DRIVER->{recognizer}	= "{[A-Za-z].*:.*}";
