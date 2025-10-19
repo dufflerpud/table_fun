@@ -17,6 +17,10 @@ $DRIVER->{mime}		= "text/html";
 $DRIVER->{recognizer}	= "<table.*?>.*?<\/table>";
 $DRIVER->{recopri}	= 3;
 
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("html.pl",__LINE__,"start eval");
+
 #########################################################################
 #	Parse an html table						#
 #########################################################################
@@ -99,4 +103,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
+#&device_debug("html.pl",__LINE__,"end eval");
 1;

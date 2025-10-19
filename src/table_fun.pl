@@ -44,6 +44,7 @@ our %ONLY_ONE_DEFAULTS =
     "otype"		=> "",
     "odelimeter"	=> " ",
     "ojustify"		=> 0,
+    "oclip"		=> 0,
     "fields"		=> "",
     "show"		=> 0
     );
@@ -262,10 +263,12 @@ sub input_records
 	    }
 	}
 
-#    print "CMC 1 Type of $ARGS{ifile}",
+#   print "CMC 1 Type of $ARGS{ifile}",
 #	" is $ARGS{itype} based on the $reason.\n";
 
-    return &{ $FUNCS{$ARGS{itype}}{input} }( $txt );
+    my $ret = &{ $FUNCS{$ARGS{itype}}{input} }( $txt );
+    #print Dumper( $ret );
+    return $ret;
     }
 
 #########################################################################
@@ -284,7 +287,7 @@ sub output_records
 	}
 
     @{$input_data->{print_order}} =
-        ( defined( $ARGS{fields} )
+        ( ( defined( $ARGS{fields} ) && $ARGS{fields} ne "" )
 	? map { $input_data->{byname}{$_} } split(/,/,$ARGS{fields})
 	: @{$input_data->{byindex}} );
 
@@ -295,7 +298,8 @@ sub output_records
 	elsif( ! open(OUT, ">&STDOUT" ) )
 	    { &fatal("Cannot dup(STDOUT):  $!"); }
 	}
-    print OUT &{ $FUNCS{$ARGS{otype}}{output} }( $input_data );
+    my $ret = &{ $FUNCS{$ARGS{otype}}{output} }( $input_data );
+    print OUT $ret;
     close( OUT );
     }
 
@@ -394,7 +398,7 @@ else
     else
 	{
 	&output_records( &input_records() );
-	system("setclip $ARGS{ofile}") if( $ARGS{oc} );
+	system("setclip $ARGS{ofile}") if( $ARGS{oclip} );
 	}
     }
 

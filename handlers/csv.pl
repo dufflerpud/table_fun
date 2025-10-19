@@ -16,6 +16,10 @@ $DRIVER->{pretty}	= "csv";
 $DRIVER->{mime}		= "text/plain";
 #$DRIVER->{recognizer}	= ".*,.*,.*",
 
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("csv.pl",__LINE__,"start eval");
+
 #########################################################################
 #	Just like input for text driver.				#
 #########################################################################
@@ -34,4 +38,5 @@ $DRIVER->{output} = sub
     return &{ $main::FUNCS{text}{output} }( @_ );
     };
 
+#&device_debug("csv.pl",__LINE__,"end eval");
 1;

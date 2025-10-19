@@ -14,6 +14,9 @@ use strict;
 my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "lpf - one line per field";
 $DRIVER->{mime}		= "text/plain";
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("lpf.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Recognize a lpf file.						#
@@ -73,17 +76,20 @@ $DRIVER->{output} = sub
 
     foreach my $rp ( @{$input_data->{records}} )
 	{
+	my @records;
 	foreach my $f ( @{$input_data->{print_order}} )
 	    {
 	    my $cp = $rp->[ $f->{ind} ];
 	    if( defined($cp) && $cp =~ /[^\s]/ )
 		{
 		my $flen = $f->{width};
-		push( @ret, sprintf("%-${field_name_length}s%s\n",$f->{name}.":",$cp) );
+		push( @records, sprintf("%-${field_name_length}s%s\n",$f->{name}.":",$cp) );
 		}
 	    }
+	push( @ret, join("",@records) );
 	}
     return join("\n",@ret);
     };
 
+#&device_debug("lpf.pl",__LINE__,"end eval");
 1;

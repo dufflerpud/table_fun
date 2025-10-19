@@ -17,6 +17,9 @@ my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "perl";
 $DRIVER->{mime}		= "text/plain";
 $DRIVER->{recognizer}	= "{.*=>.*}";
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("perl.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse a perl file (more of a toy than actually useful)		#
@@ -71,4 +74,5 @@ $DRIVER->{output} = sub
     return Dumper( $input_data );
     };
 
+#&device_debug("perl.pl",__LINE__,"end eval");
 1;

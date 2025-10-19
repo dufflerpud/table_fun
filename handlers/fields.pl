@@ -15,6 +15,10 @@ my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "fields";
 $DRIVER->{mime}		= "text/plain";
 
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("fields.pl",__LINE__,"start eval");
+
 #########################################################################
 #	Output each field with a list of found values.			#
 #########################################################################
@@ -46,4 +50,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
+#&device_debug("fields.pl",__LINE__,"end eval");
 1;

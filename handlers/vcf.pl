@@ -16,6 +16,9 @@ $DRIVER->{pretty}	= "vcf - Virtual Contact File";
 $DRIVER->{mime}		= "text/plain";
 $DRIVER->{recognizer}	= "BEGIN:VCARD";
 $DRIVER->{recopri}	= 2;
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("vcf.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse a VCF file.						#
@@ -198,4 +201,5 @@ $DRIVER->{output} = sub
     return join("\n",@ret);
     };
 
+#&device_debug("vcf.pl",__LINE__,"end eval");
 1;

@@ -16,6 +16,9 @@ $DRIVER->{pretty}	= "text - Text file";
 $DRIVER->{mime}		= "text/plain";
 
 my $COMMON_SEPS = "\t,|!:+";
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("text.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse a text file						#
@@ -23,7 +26,7 @@ my $COMMON_SEPS = "\t,|!:+";
 $DRIVER->{input} = sub
     {
     my( $fl ) = @_;
-    if( ! defined( $main::ARGS{idelimeter} ) )
+    if( ! defined( $main::ARGS{idelimeter} ) || $main::ARGS{idelimeter} eq "" )
         {
 	foreach my $try ( split(//,$COMMON_SEPS) )
 	    {
@@ -105,4 +108,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
+#&device_debug("text.pl",__LINE__,"end eval");
 1;

@@ -12,8 +12,11 @@
 use strict;
 
 my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "mwt - Media Wiki Table",
-$DRIVER->{mime}		= "text/plain",
+$DRIVER->{pretty}	= "mwt - Media Wiki Table";
+$DRIVER->{mime}		= "text/plain";
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("mwt.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse a media wiki table					#
@@ -104,4 +107,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
+#&device_debug("mwt.pl",__LINE__,"end eval");
 1;

@@ -17,6 +17,9 @@ my $DRIVER={};		# Just for debugging
 $DRIVER->{pretty}	= "json";
 $DRIVER->{mime}		= "text/plain";
 #$DRIVER->{recognizer}	= "{[A-Za-z].*:.*}";
+use lib "/usr/local/lib/perl";
+use cpi_drivers qw( device_debug );
+#&device_debug("json.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse a json file (more of a toy than actually useful)		#
@@ -61,4 +64,5 @@ $DRIVER->{output} = sub
     return join("", "[ ", join(",\n  ",@ret), " ]\n");
     };
 
+#&device_debug("json.pl",__LINE__,"end eval");
 1;
