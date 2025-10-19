@@ -23,17 +23,17 @@ my $COMMON_SEPS = "\t,|!:+";
 $DRIVER->{input} = sub
     {
     my( $fl ) = @_;
-    if( ! defined( $main::ARGS{id} ) )
+    if( ! defined( $main::ARGS{idelimeter} ) )
         {
 	foreach my $try ( split(//,$COMMON_SEPS) )
 	    {
 	    my $sep = '\\' . $try;
 	    if( $fl =~ /$sep.*$sep/ )
-	        { $main::ARGS{id}=$try; last; }
+	        { $main::ARGS{idelimeter}=$try; last; }
 	    }
-	$main::ARGS{id} ||= "\t";
+	$main::ARGS{idelimeter} ||= "\t";
 	}
-    my $sep = '\\' . $main::ARGS{id};
+    my $sep = '\\' . $main::ARGS{idelimeter};
 
     my %output_data;
     foreach my $rec ( split(/\n/ms,$fl) )
@@ -84,7 +84,7 @@ $DRIVER->{output} = sub
 
     &main::calculate_field_widths( $input_data );
 
-    $_ = join( $main::ARGS{od},
+    $_ = join( $main::ARGS{odelimeter},
 	map{ sprintf($_->{sprintf},$_->{name}) } @{$input_data->{print_order}} );
     s/\s*$//g;
     push @ret, $_,"\n";
@@ -98,7 +98,7 @@ $DRIVER->{output} = sub
 	    $cp = "" if( ! defined($cp) );
 	    push( @ln, sprintf($f->{sprintf},$cp) );
 	    }
-	$_ = join( $main::ARGS{od}, @ln );
+	$_ = join( $main::ARGS{odelimeter}, @ln );
 	s/\s*$//g;
 	push @ret, $_, "\n";
 	}

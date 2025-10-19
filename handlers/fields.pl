@@ -24,8 +24,8 @@ $DRIVER->{output} = sub
     my %values;
     my @ret;
 
-#    push @ret, "Type of $main::ARGS{if}",
-#	" is $main::ARGS{it} based on the $main::reason.\n";
+#    push @ret, "Type of $main::ARGS{ifile}",
+#	" is $main::ARGS{itype} based on the $main::reason.\n";
     $main::reason=$main::reason;	# Eliminate "only used once" errors.
 
     foreach my $rp ( @{$input_data->{records}} )

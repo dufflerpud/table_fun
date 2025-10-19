@@ -29,8 +29,8 @@ $DRIVER->{input} = sub
 #########################################################################
 $DRIVER->{output} = sub
     {
-    $main::ARGS{od} = ",";
-    $main::ARGS{oj} = 0;
+    $main::ARGS{odelimeter} = ",";
+    $main::ARGS{ojustify} = 0;
     return &{ $main::FUNCS{text}{output} }( @_ );
     };
 

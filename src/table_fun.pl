@@ -27,6 +27,7 @@
 
 use strict;
 
+use Data::Dumper;
 use lib "/usr/local/lib/perl";
 use cpi_file qw( cleanup fatal files_in );
 use cpi_cgi qw( CGIreceive CGIheader );
@@ -36,10 +37,15 @@ use cpi_drivers qw( get_drivers );
 # Put constants here
 our %ONLY_ONE_DEFAULTS =
     (
-    "if"	=> "/dev/stdin",
-    "of"	=> "/dev/stdout",
-    "od"	=> " ",
-    "oj"	=> 0
+    "ifile"		=> "/dev/stdin",
+    "itype"		=> "",
+    "idelimeter"	=> "",
+    "ofile"		=> "/dev/stdout",
+    "otype"		=> "",
+    "odelimeter"	=> " ",
+    "ojustify"		=> 0,
+    "fields"		=> "",
+    "show"		=> 0
     );
 my $HANDLER_DIR = "$cpi_vars::BASEDIR/handlers";
 
@@ -182,8 +188,8 @@ sub calculate_field_widths
         {
 	$f->{tdargs} = ($f->{justified} < 0 ? "align=left" : "align=right");
 	$f->{sprintf} =
-	    ( $ARGS{oj}
-	    ? "%".($f->{justified}*$ARGS{oj})."s"
+	    ( $ARGS{ojustify}
+	    ? "%".($f->{justified}*$ARGS{ojustify})."s"
 	    : "%".($f->{justified}*$f->{width})."s"
 	    );
 	}
@@ -204,16 +210,16 @@ sub output_text	{ return &{$FUNCS{text}{output}}( @_ ); }
 sub input_records
     {
     my $txt;
-    if( ! $ARGS{if} || $ARGS{if} eq "/dev/stdin" )
+    if( ! $ARGS{ifile} || $ARGS{ifile} eq "/dev/stdin" )
 	{ $txt = join("",<STDIN>); }
     else
 	{
-	open(INF,$ARGS{if}) || &fatal("Cannot open $ARGS{if}:  $!");
+	open(INF,$ARGS{ifile}) || &fatal("Cannot open $ARGS{ifile}:  $!");
 	$txt = join("",<INF>);
 	close( INF );
 	}
 
-    if( $ARGS{it} )
+    if( $ARGS{itype} )
         { $reason = "input arguments"; }
     else
         {
@@ -228,38 +234,38 @@ sub input_records
 		    {
 		    if( &{$_}($txt) )
 		        {
-			$ARGS{it}=$t;
+			$ARGS{itype}=$t;
 			$reason = "content matching routine";
 			last;
 			}
 		    }
 		elsif($txt=~/$_/msi)
 		    {
-		    $ARGS{it}=$t;
+		    $ARGS{itype}=$t;
 		    $reason = "content matching \"$_\"";
 		    last;
 		    }
 		}
 	    }
 
-	if( $ARGS{it} )
+	if( $ARGS{itype} )
 	    {}
-	elsif( $ARGS{if} =~ /.*\.([A-Za-z0-9]+)$/ && $FUNCS{$1} )
+	elsif( $ARGS{ifile} =~ /.*\.([A-Za-z0-9]+)$/ && $FUNCS{$1} )
 	    {
-	    $ARGS{it} = $1;
+	    $ARGS{itype} = $1;
 	    $reason = "extension of filename";
 	    }
 	else
 	    {
-	    $ARGS{it} = "text";
+	    $ARGS{itype} = "text";
 	    $reason = "default";
 	    }
 	}
 
-#    print "CMC 1 Type of $ARGS{if}",
-#	" is $ARGS{it} based on the $reason.\n";
+#    print "CMC 1 Type of $ARGS{ifile}",
+#	" is $ARGS{itype} based on the $reason.\n";
 
-    return &{ $FUNCS{$ARGS{it}}{input} }( $txt );
+    return &{ $FUNCS{$ARGS{itype}}{input} }( $txt );
     }
 
 #########################################################################
@@ -269,27 +275,27 @@ sub output_records
     {
     my( $input_data ) = @_;
 
-    if( ! $ARGS{ot} )
+    if( ! $ARGS{otype} )
         {
-	if( $ARGS{of} =~ /.*\.([A-Za-z0-9]+)$/ && $FUNCS{$1} )
-	    { $ARGS{ot} = $1; }
+	if( $ARGS{ofile} =~ /.*\.([A-Za-z0-9]+)$/ && $FUNCS{$1} )
+	    { $ARGS{otype} = $1; }
 	else
-	    { $ARGS{ot} = "text"; }
+	    { $ARGS{otype} = "text"; }
 	}
 
     @{$input_data->{print_order}} =
-        ( defined( $ARGS{f} )
-	? map { $input_data->{byname}{$_} } split(/,/,$ARGS{f})
+        ( defined( $ARGS{fields} )
+	? map { $input_data->{byname}{$_} } split(/,/,$ARGS{fields})
 	: @{$input_data->{byindex}} );
 
-    if( ! open(OUT,"> $ARGS{of}") )
+    if( ! open(OUT,"> $ARGS{ofile}") )
         {
-	if( $ARGS{of} ne "/dev/stdout" )
-	    { &fatal("Cannot write $ARGS{of}:  $!"); }
+	if( $ARGS{ofile} ne "/dev/stdout" )
+	    { &fatal("Cannot write $ARGS{ofile}:  $!"); }
 	elsif( ! open(OUT, ">&STDOUT" ) )
 	    { &fatal("Cannot dup(STDOUT):  $!"); }
 	}
-    print OUT &{ $FUNCS{$ARGS{ot}}{output} }( $input_data );
+    print OUT &{ $FUNCS{$ARGS{otype}}{output} }( $input_data );
     close( OUT );
     }
 
@@ -351,8 +357,8 @@ sub do_table_conversion
     $tmpfile = &tempfile();
     &write_file( $tmpfile, $cpi_vars::FORM{contents} );
 
-    $ARGS{if} = $tmpfile;
-    $ARGS{ot} = $cpi_vars::FORM{output_type};
+    $ARGS{ifile} = $tmpfile;
+    $ARGS{otype} = $cpi_vars::FORM{output_type};
     grep( $ARGS{$_}||=$ONLY_ONE_DEFAULTS{$_}, keys %ONLY_ONE_DEFAULTS );
 
     print "Content-type:  ", $FUNCS{ $cpi_vars::FORM{output_type} }{mime}, "\n\n";
@@ -376,8 +382,20 @@ if( $ENV{SCRIPT_NAME} )
 else
     {
     &parse_arguments();
-    &output_records( &input_records() );
-    system("setclip $ARGS{of}") if( $ARGS{oc} );
+    if( $ARGS{show} )
+        {
+	print "Input:  ",
+	    ( map { " $_" } grep( $FUNCS{$_}{input}, sort keys %FUNCS ) ),
+	    "\n",
+	    "Output: ",
+	    ( map { " $_" } grep( $FUNCS{$_}{output}, sort keys %FUNCS ) ),
+	    "\n";
+	}
+    else
+	{
+	&output_records( &input_records() );
+	system("setclip $ARGS{ofile}") if( $ARGS{oc} );
+	}
     }
 
 &cleanup( $exstat );
