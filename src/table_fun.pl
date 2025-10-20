@@ -386,7 +386,11 @@ if( $ENV{SCRIPT_NAME} )
 else
     {
     &parse_arguments();
-    if( $ARGS{show} )
+    if( $ARGS{show} eq "inputs" )
+        { print (map{"$_\n"} grep( $FUNCS{$_}{input}, sort keys %FUNCS) ); }
+    elsif( $ARGS{show} eq "outputs" )
+        { print (map{"$_\n"} grep( $FUNCS{$_}{output}, sort keys %FUNCS) ); }
+    elsif( $ARGS{show} )
         {
 	print "Input:  ",
 	    ( map { " $_" } grep( $FUNCS{$_}{input}, sort keys %FUNCS ) ),

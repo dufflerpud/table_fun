@@ -11,15 +11,14 @@
 PROJECTSDIR?=$(shell echo $(CURDIR) | sed -e 's+/projects/.*+/projects+')
 include $(PROJECTSDIR)/common/Makefile.std
 
-OUTPUT_TYPES=$(basename $(notdir $(wildcard handlers/*.pl)))
+OUTPUT_TYPES=$(shell $(BINDIR)/table_fun -show=outputs)
 INPUT_FILES=$(notdir $(wildcard tests/*.*) )
 TEST_OUTPUTS=$(addprefix $(RESDIR)/,$(foreach output,$(OUTPUT_TYPES),$(foreach input,$(INPUT_FILES),$(input).$(output))))
 
 test:
-		echo making test...
-		echo "output_types=$(OUTPUT_TYPES)"
-		echo "input_files=$(INPUT_FILES)"
-		echo "test_outputs=$(TEST_OUTPUTS)"
+		@echo "output_types=$(OUTPUT_TYPES)"
+		@echo "input_files=$(INPUT_FILES)"
+		@echo "test_outputs=$(TEST_OUTPUTS)"
 		make $(TEST_OUTPUTS)
 
 $(RESDIR)/%:
