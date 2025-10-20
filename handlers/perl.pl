@@ -38,13 +38,13 @@ $DRIVER->{input} = sub
 #########################################################################
 #	Fix quoting of argument.					#
 #########################################################################
-sub perl_requote
+$DRIVER->{requote} = sub
     {
     my( $arg ) = @_;
     #$arg =~ s/'/\\\\'/g;
     #$arg =~ s/"/\\\\"/g;
     return $arg;
-    }
+    };
 
 #########################################################################
 #	Print code suitable for inclusion in perl.			#
@@ -66,7 +66,7 @@ $DRIVER->{output} = sub
 #	        map {
 #		    '"'.&main::orempty(${_}->{name}).'"=>"' .
 #		    ( defined($_->{ind})
-#			? &perl_requote(&main::orempty($p->[$_->{ind}])) : "" ). '"'
+#			? &{$DRIVER->{requote}}(&main::orempty($p->[$_->{ind}])) : "" ). '"'
 #		    } @{$input_data->{print_order}}
 #	    ) ."}" );
 #	}
