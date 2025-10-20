@@ -21,6 +21,10 @@ test:
 		@echo "test_outputs=$(TEST_OUTPUTS)"
 		make $(TEST_OUTPUTS)
 
+fresh:
+		git pull
+		sudo make install
+
 $(RESDIR)/%:
 		@[ -d $(RESDIR) ] || mkdir -p $(RESDIR)
 		$(BINDIR)/table_fun -if tests/$(notdir $(basename $@)) -of $@
