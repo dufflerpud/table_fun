@@ -32,7 +32,7 @@ use lib "/usr/local/lib/perl";
 use cpi_file qw( cleanup fatal files_in );
 use cpi_cgi qw( CGIreceive CGIheader );
 use cpi_arguments qw( parse_arguments );
-use cpi_drivers qw( get_drivers );
+use cpi_drivers qw( get_drivers add_driver );
 
 # Put constants here
 our %ONLY_ONE_DEFAULTS =
@@ -198,7 +198,7 @@ sub calculate_field_widths
     }
 
 #########################################################################
-#	Defined because csv driver is really just a blatant rippoff	#
+#	Defined because csv driver is really just a blatant ripoff	#
 #	of the text driver.  Sadly the drivers do not support directly	#
 #	calling each other.						#
 #########################################################################
@@ -386,6 +386,12 @@ if( $ENV{SCRIPT_NAME} )
 else
     {
     &parse_arguments();
+
+    &add_driver( \%FUNCS, $ARGS{itype}, $ARGS{itype} )
+	if( $ARGS{itype} && -r $ARGS{itype} );
+    &add_driver( \%FUNCS, $ARGS{otype}, $ARGS{otype} )
+	if( $ARGS{otype} && -r $ARGS{otype} );
+
     if( $ARGS{show} eq "inputs" )
         { print (map{"$_\n"} grep( $FUNCS{$_}{input}, sort keys %FUNCS) ); }
     elsif( $ARGS{show} eq "outputs" )
