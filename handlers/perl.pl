@@ -13,18 +13,18 @@ use strict;
 
 use Data::Dumper;
 
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "perl";
-$DRIVER->{mime}		= "text/plain";
-$DRIVER->{recognizer}	= "{.*=>.*}";
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
-#&device_debug("perl.pl",__LINE__,"start eval");
+
+$cpi_drivers::this->{pretty}		= "perl";
+$cpi_drivers::this->{mime}		= "text/plain";
+$cpi_drivers::this->{recognizer}	= "{.*=>.*}";
+#&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Parse a perl file (more of a toy than actually useful)		#
 #########################################################################
-$DRIVER->{input} = sub
+$cpi_drivers::this->{input} = sub
     {
     my( $fl ) = @_;
 
@@ -38,7 +38,7 @@ $DRIVER->{input} = sub
 #########################################################################
 #	Fix quoting of argument.					#
 #########################################################################
-$DRIVER->{requote} = sub
+$cpi_drivers::this->{requote} = sub
     {
     my( $arg ) = @_;
     #$arg =~ s/'/\\\\'/g;
@@ -54,7 +54,7 @@ $DRIVER->{requote} = sub
 #									#
 #	However, it made me look at Data::Dumper and that's cool!	#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
 
@@ -66,7 +66,7 @@ $DRIVER->{output} = sub
 #	        map {
 #		    '"'.&main::orempty(${_}->{name}).'"=>"' .
 #		    ( defined($_->{ind})
-#			? &{$DRIVER->{requote}}(&main::orempty($p->[$_->{ind}])) : "" ). '"'
+#			? &{$cpi_drivers::this->{requote}}(&main::orempty($p->[$_->{ind}])) : "" ). '"'
 #		    } @{$input_data->{print_order}}
 #	    ) ."}" );
 #	}
@@ -74,5 +74,5 @@ $DRIVER->{output} = sub
     return Dumper( $input_data );
     };
 
-#&device_debug("perl.pl",__LINE__,"end eval");
+#&device_debug(__FILE__,__LINE__,"end eval");
 1;

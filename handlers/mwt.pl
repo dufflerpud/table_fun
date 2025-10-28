@@ -11,17 +11,17 @@
 #@HDR@	it is furnished.
 use strict;
 
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "mwt - Media Wiki Table";
-$DRIVER->{mime}		= "text/plain";
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
-#&device_debug("mwt.pl",__LINE__,"start eval");
+
+$cpi_drivers::this->{pretty}		= "mwt - Media Wiki Table";
+$cpi_drivers::this->{mime}		= "text/plain";
+#&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Parse a media wiki table					#
 #########################################################################
-$DRIVER->{input} = sub
+$cpi_drivers::this->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*({\|[^!\|]*)(.*?)\|}/ms );
@@ -73,7 +73,7 @@ $DRIVER->{input} = sub
 #########################################################################
 #	Output a media wiki table					#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;
@@ -107,5 +107,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
-#&device_debug("mwt.pl",__LINE__,"end eval");
+#&device_debug(__FILE__,__LINE__,"end eval");
 1;

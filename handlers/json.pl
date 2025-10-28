@@ -12,19 +12,18 @@
 use strict;
 
 use JSON;
-
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "json";
-$DRIVER->{mime}		= "text/plain";
-#$DRIVER->{recognizer}	= "{[A-Za-z].*:.*}";
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
-#&device_debug("json.pl",__LINE__,"start eval");
+
+$cpi_drivers::this->{pretty}		= "json";
+$cpi_drivers::this->{mime}		= "text/plain";
+#$cpi_drivers::this->{recognizer}	= "{[A-Za-z].*:.*}";
+#&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Parse a json file (more of a toy than actually useful)		#
 #########################################################################
-$DRIVER->{input} = sub
+$cpi_drivers::this->{input} = sub
     {
     my( $fl ) = @_;
 
@@ -45,7 +44,7 @@ sub json_requote
 #########################################################################
 #	Print code suitable for inclusion in javascript.		#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;
@@ -64,5 +63,5 @@ $DRIVER->{output} = sub
     return join("", "[ ", join(",\n  ",@ret), " ]\n");
     };
 
-#&device_debug("json.pl",__LINE__,"end eval");
+#&device_debug(__FILE__,__LINE__,"end eval");
 1;

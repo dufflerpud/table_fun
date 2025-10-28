@@ -11,18 +11,17 @@
 #@HDR@	it is furnished.
 use strict;
 
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "fields";
-$DRIVER->{mime}		= "text/plain";
-
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
-#&device_debug("fields.pl",__LINE__,"start eval");
+
+$cpi_drivers::this->{pretty}		= "fields";
+$cpi_drivers::this->{mime}		= "text/plain";
+#&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Output each field with a list of found values.			#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
     my %values;
@@ -50,5 +49,5 @@ $DRIVER->{output} = sub
     return join("",@ret);
     };
 
-#&device_debug("fields.pl",__LINE__,"end eval");
+#&device_debug(__FILE__,__LINE__,"end eval");
 1;

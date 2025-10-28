@@ -11,17 +11,17 @@
 #@HDR@	it is furnished.
 use strict;
 
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "lpf - one line per field";
-$DRIVER->{mime}		= "text/plain";
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
-#&device_debug("lpf.pl",__LINE__,"start eval");
+
+$cpi_drivers::this->{pretty}		= "lpf - one line per field";
+$cpi_drivers::this->{mime}		= "text/plain";
+#&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Recognize a lpf file.						#
 #########################################################################
-$DRIVER->{recognizer} = sub
+$cpi_drivers::this->{recognizer} = sub
     {
     return 0 if( $_[0]=~/^Subject:/ms && $_[0]=~/^From:/ && $_[0]=~/^To:/ );
     return
@@ -32,7 +32,7 @@ $DRIVER->{recognizer} = sub
 #########################################################################
 #	Parse a lpf file						#
 #########################################################################
-$DRIVER->{input} = sub
+$cpi_drivers::this->{input} = sub
     {
     my( $fl ) = @_;
     my %output_data;
@@ -59,7 +59,7 @@ $DRIVER->{input} = sub
 #########################################################################
 #	Output one line per field					#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;
@@ -91,5 +91,5 @@ $DRIVER->{output} = sub
     return join("\n",@ret);
     };
 
-#&device_debug("lpf.pl",__LINE__,"end eval");
+#&device_debug(__FILE__,__LINE__,"end eval");
 1;

@@ -11,20 +11,19 @@
 #@HDR@	it is furnished.
 use strict;
 
-my $DRIVER={};		# Just for debugging
-$DRIVER->{pretty}	= "HTML";
-$DRIVER->{mime}		= "text/html";
-$DRIVER->{recognizer}	= "<table.*?>.*?<\/table>";
-$DRIVER->{recopri}	= 3;
-
 use lib "/usr/local/lib/perl";
 use cpi_drivers qw( device_debug );
+
+$cpi_drivers::this->{pretty}		= "HTML";
+$cpi_drivers::this->{mime}		= "text/html";
+$cpi_drivers::this->{recognizer}	= "<table.*?>.*?<\/table>";
+$cpi_drivers::this->{recopri}		= 3;
 #&device_debug("html.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse an html table						#
 #########################################################################
-$DRIVER->{input} = sub
+$cpi_drivers::this->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*(<table.*?)>(.*?)<\/table>/ms );
@@ -69,7 +68,7 @@ $DRIVER->{input} = sub
 #########################################################################
 #	Output html table						#
 #########################################################################
-$DRIVER->{output} = sub
+$cpi_drivers::this->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;
