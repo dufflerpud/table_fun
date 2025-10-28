@@ -12,10 +12,11 @@
 use strict;
 
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}	= "text - Text file";
-$cpi_drivers::this->{mime}	= "text/plain";
+my $driverp = &get_driver(__FILE__);
+$driverp->{pretty}	= "text - Text file";
+$driverp->{mime}	= "text/plain";
 
 my $COMMON_SEPS = "\t,|!:+";
 #&device_debug(__FILE__,__LINE__,"start eval");
@@ -23,7 +24,7 @@ my $COMMON_SEPS = "\t,|!:+";
 #########################################################################
 #	Parse a text file						#
 #########################################################################
-$cpi_drivers::this->{input} = sub
+$driverp->{input} = sub
     {
     my( $fl ) = @_;
     if( ! defined( $main::ARGS{idelimeter} ) || $main::ARGS{idelimeter} eq "" )
@@ -80,7 +81,7 @@ $cpi_drivers::this->{input} = sub
 #########################################################################
 #	Output text							#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;

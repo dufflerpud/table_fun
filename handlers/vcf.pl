@@ -11,12 +11,13 @@
 #@HDR@	it is furnished.
 use strict;
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}		= "vcf - Virtual Contact File";
-$cpi_drivers::this->{mime}		= "text/plain";
-$cpi_drivers::this->{recognizer}	= "BEGIN:VCARD";
-$cpi_drivers::this->{recopri}	= 2;
+my $driverp = &get_driver(__FILE__);
+$driverp->{pretty}	= "vcf - Virtual Contact File";
+$driverp->{mime}	= "text/plain";
+$driverp->{recognizer}	= "BEGIN:VCARD";
+$driverp->{recopri}	= 2;
 #&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
@@ -61,7 +62,7 @@ my %COLLAPSE_FIELDS =
 #	Parse a VCF file (unfortunately, they are so hairy that we end	#
 #	up doing lots of table based substitutions).			#
 #########################################################################
-$cpi_drivers::this->{input} = sub
+$driverp->{input} = sub
     {
     my( $fl ) = @_;
     my %output_data;
@@ -171,7 +172,7 @@ sub field_of
 #########################################################################
 #	Output vcf							#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;

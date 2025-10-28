@@ -12,16 +12,18 @@
 use strict;
 
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}		= "fields";
-$cpi_drivers::this->{mime}		= "text/plain";
+my $driverp = &get_driver(__FILE__);
+
+$driverp->{pretty}		= "fields";
+$driverp->{mime}		= "text/plain";
 #&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Output each field with a list of found values.			#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     my( $input_data ) = @_;
     my %values;

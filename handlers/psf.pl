@@ -12,17 +12,18 @@
 use strict;
 
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}		= "psf";
-$cpi_drivers::this->{mime}		= "text/plain";
-#$cpi_drivers::this->{recognizer}	= ".*|.*|.*",
+my $driverp = &get_driver(__FILE__);
+$driverp->{pretty}		= "psf";
+$driverp->{mime}		= "text/plain";
+#$driverp->{recognizer}	= ".*|.*|.*",
 #&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Just like input for text driver.				#
 #########################################################################
-$cpi_drivers::this->{input} = sub
+$driverp->{input} = sub
     {
     $main::ARGS{idelimeter} = "|";
     return &{ $main::FUNCS{text}{input} }( @_ );
@@ -31,7 +32,7 @@ $cpi_drivers::this->{input} = sub
 #########################################################################
 #	Just like output text only use a pipe as the delimeter.	#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     $main::ARGS{odelimeter} = "|";
     $main::ARGS{ojustify} = 0;

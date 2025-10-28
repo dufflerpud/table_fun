@@ -12,16 +12,17 @@
 use strict;
 
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}		= "mwt - Media Wiki Table";
-$cpi_drivers::this->{mime}		= "text/plain";
+my $driverp = &get_driver(__FILE__);
+$driverp->{pretty}		= "mwt - Media Wiki Table";
+$driverp->{mime}		= "text/plain";
 #&device_debug(__FILE__,__LINE__,"start eval");
 
 #########################################################################
 #	Parse a media wiki table					#
 #########################################################################
-$cpi_drivers::this->{input} = sub
+$driverp->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*({\|[^!\|]*)(.*?)\|}/ms );
@@ -73,7 +74,7 @@ $cpi_drivers::this->{input} = sub
 #########################################################################
 #	Output a media wiki table					#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;

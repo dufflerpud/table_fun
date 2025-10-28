@@ -12,18 +12,19 @@
 use strict;
 
 use lib "/usr/local/lib/perl";
-use cpi_drivers qw( device_debug );
+use cpi_drivers qw( device_debug get_driver );
 
-$cpi_drivers::this->{pretty}		= "HTML";
-$cpi_drivers::this->{mime}		= "text/html";
-$cpi_drivers::this->{recognizer}	= "<table.*?>.*?<\/table>";
-$cpi_drivers::this->{recopri}		= 3;
+my $driverp = &get_driver(__FILE__);
+$driverp->{pretty}		= "HTML";
+$driverp->{mime}		= "text/html";
+$driverp->{recognizer}	= "<table.*?>.*?<\/table>";
+$driverp->{recopri}		= 3;
 #&device_debug("html.pl",__LINE__,"start eval");
 
 #########################################################################
 #	Parse an html table						#
 #########################################################################
-$cpi_drivers::this->{input} = sub
+$driverp->{input} = sub
     {
     my( $fl ) = @_;
     $fl = $2 if( $fl =~ /.*(<table.*?)>(.*?)<\/table>/ms );
@@ -68,7 +69,7 @@ $cpi_drivers::this->{input} = sub
 #########################################################################
 #	Output html table						#
 #########################################################################
-$cpi_drivers::this->{output} = sub
+$driverp->{output} = sub
     {
     my( $input_data ) = @_;
     my @ret;
