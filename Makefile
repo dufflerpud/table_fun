@@ -19,11 +19,11 @@ test:
 		@echo "output_types=$(OUTPUT_TYPES)"
 		@echo "input_files=$(INPUT_FILES)"
 		@echo "test_outputs=$(TEST_OUTPUTS)"
-		make $(TEST_OUTPUTS)
+		$(MAKE) $(TEST_OUTPUTS)
 
 fresh:
 		git pull
-		sudo make install
+		sudo $(MAKE) install
 
 $(RESDIR)/%:
 		@[ -d $(RESDIR) ] || mkdir -p $(RESDIR)
