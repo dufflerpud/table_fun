@@ -20,6 +20,7 @@ test:
 		@echo "input_files=$(INPUT_FILES)"
 		@echo "test_outputs=$(TEST_OUTPUTS)"
 		$(MAKE) $(TEST_OUTPUTS)
+		$(MAKE) std_test
 
 fresh:
 		git pull
@@ -35,4 +36,4 @@ results/%:
 
 %:
 		@echo "Invoking std_$@ rule:"
-		@$(MAKE) std_$@ ORIGINAL_TARGET=$@
+		@$(MAKE) ORIGINAL_TARGET=$@ std_$@
