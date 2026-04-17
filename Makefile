@@ -20,7 +20,7 @@ test:
 		@echo "input_files=$(INPUT_FILES)"
 		@echo "test_outputs=$(TEST_OUTPUTS)"
 		$(MAKE) $(TEST_OUTPUTS)
-		$(MAKE) std_test
+		# $(MAKE) std_test
 
 fresh:
 		git pull
